@@ -48,6 +48,13 @@ def _setup_lists(lsize: int, n: int, list_type: Callable) -> list[LinkedList]:
     True
     """
     # TODO: Implement this helper function.
+    hold = []
+    item = []
+    for i in range(lsize):
+        item.append(1)
+    for j in range(n):
+        item.append(list_type(item))
+    return item
 
 
 def time_len(list_type: Callable) -> list[float]:
@@ -75,8 +82,38 @@ def time_len(list_type: Callable) -> list[float]:
     return times
 
 
-# TODO: Plot the timing experiment using matplotlib.
-#       You may want to follow the pattern provided in Lab 4's starter code.
+
+def plot_experiment() -> None:
+    """Run the timing experiment on AddToStartQueue and AddToEndQueue
+     and plot a graph."""
+    import matplotlib.pyplot as plt
+
+    # Run the experiments and store the results
+    linktimes, ltime = time_len(LinkedList), time_len(list)
+
+    # Plot the results of our experiments and assign labels to each plot.
+    # Our call to plt.plot takes 3 arguments:
+    #     - The x-coordinates of the values to plot
+    #     - The y-coordinates of the values to plot
+    #     - The format we want to plot with.
+    #       'ro' is 'red circle'
+    #       'bo' is 'blue circle'
+    #       Other formats include 'rx' (red X), 'bx' (blue X) and many more!
+    start_plt, = plt.plot(SIZES, linktimes, 'ro')
+    start_plt.set_label("LinkedList.enqueue")
+
+    end_plt, = plt.plot(SIZES, ltime, 'bo')
+    end_plt.set_label("BuiltinList.enqueue")
+
+    # After we finish plotting everything, we can create the legend of
+    # our graph and label the axes
+    plt.legend()
+    plt.xlabel("Queue Size")
+    plt.ylabel("Average Time (μs)")
+
+    # Show our plotted results. This line must be called after
+    # all of the other setup.
+    plt.show()
 
 
 if __name__ == '__main__':
@@ -86,5 +123,7 @@ if __name__ == '__main__':
     print("Running len(LinkedList) experiments...")
     time_len(LinkedList)
 
+    print("plotting")
+    plot_experiment
     # TODO: After you implement a function to run the timing experiment,
     #       Add a call to that function below.

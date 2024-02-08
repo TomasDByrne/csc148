@@ -45,16 +45,18 @@ class LinkedList:
     """
     _first: _Node | None
 
-    def __init__(self) -> None:
+    def __init__(self, items: list | None) -> None:
         """Initialize a new empty linked list containing the given items.
         """
-        self._first = None
-
-        # TODO: After implementing the methods below, modify this __init__
-        #       following the instructions in the lab handout.
-        #       Afterwards: uncomment the doctests in the methods below
-        #       and try to run it.
-
+        if items is None or len(items) == 0:
+            self._first = None
+        else:
+            self._first = _Node(items[0])
+            curr = self._first
+            for thing in items: 
+                curr.next = _Node(thing)
+                curr = curr.next
+                
     # ------------------------------------------------------------------------
     # Methods from lecture/readings
     # ------------------------------------------------------------------------
@@ -157,6 +159,13 @@ class LinkedList:
         # 3
         """
         # TODO: implement this method
+        count = 0
+        curr = self._first
+        while curr != None:
+            curr = curr.next
+            count += 1
+        return count
+
 
     def count(self, item: Any) -> int:
         """Return the number of times <item> occurs in this list.
@@ -171,7 +180,13 @@ class LinkedList:
         # >>> lst.count(3)
         # 1
         """
-        # TODO: implement this method
+        count = 0
+        curr = self._first
+        while curr != None:
+            if curr.item == item:
+                count += 1
+            curr = curr.next
+        return count
 
     def index(self, item: Any) -> int:
         """Return the index of the first occurrence of <item> in this list.
@@ -189,7 +204,15 @@ class LinkedList:
         # Traceback (most recent call last):
         # ValueError
         """
-        # TODO: implement this method
+        count = 0
+        curr = self._first
+        while (not curr is None) and not curr.item == item:
+            curr = curr.next
+            count += 1 
+        if curr is None:
+            raise ValueError
+        else:
+            return count
 
     def __setitem__(self, index: int, item: Any) -> None:
         """Store item at position <index> in this list.
@@ -203,7 +226,22 @@ class LinkedList:
         # >>> str(lst)
         # '[100 -> 200 -> 300]'
         """
-        # TODO: implement this method
+        a = _Node(item)
+        if index == 0:
+            a.next, self._first = self._first, a
+        else:
+            curr = self._first
+            count = 0
+            while count < index - 1 and curr is not None:
+                count += 1
+                curr = curr.next
+            if curr is None:
+                raise ValueError
+            else:
+                a.next, curr.next = curr.next, a
+            
+
+
 
 
 if __name__ == '__main__':
@@ -213,3 +251,4 @@ if __name__ == '__main__':
     # Uncomment to check your work with PythonTA!
     # import python_ta
     # python_ta.check_all()
+
